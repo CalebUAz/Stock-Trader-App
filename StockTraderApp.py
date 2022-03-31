@@ -41,3 +41,25 @@ def create_stocks():
         #df.Volume[i]  = value + gauss(5, 10)
     st.dataframe(df)
     return df    
+
+def main():
+
+    st.title("Stock trading application")
+
+    menu = ["Home","Login","SignUp", "Admin"]
+    choice = st.sidebar.selectbox("Menu",menu)
+
+    if choice == "Home":
+         st.subheader("Admin Login Section")
+    
+    elif choice == "Admin":
+        st.subheader("Admin Login Section")
+
+    elif choice == "Login":
+        st.subheader("Login Section")           
+
+    elif choice == "SignUp":
+        st.subheader("Create New Account")
+
+if __name__ == '__main__':
+    main()
