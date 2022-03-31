@@ -13,7 +13,7 @@ def main():
 
     st.title("Stock trading application")
 
-    menu = ["Home","Login","SignUp", "Admin"]
+    menu = ["Home","Login","SignUp", "Admin Login"]
     choice = st.sidebar.selectbox("Menu",menu)
 
     if choice == "Home":
@@ -36,9 +36,12 @@ def main():
             new_email = st.text_input("Email")      
             new_user = st.text_input("Username")
             new_password = st.text_input("Password",type='password')
-            if st.button("Signup"):
-                add_admin(new_full_name, new_email, new_user, new_password, c, conn)
 
+            if st.button("Signup"):
+                #add entered details to the DB
+                add_admin(new_full_name, new_email, new_user, new_password, c, conn)
+                st.success("You have successfully created a valid Admin Account")
+                st.info("Go to Admin Login Menu to login")
 
 if __name__ == '__main__':
     main()
