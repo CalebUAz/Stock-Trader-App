@@ -37,6 +37,18 @@ def main():
 
     elif choice == "User Login":
         st.subheader("Login Section")           
+        username = st.sidebar.text_input("User Name")
+        password = st.sidebar.text_input("Password",type='password')
+        if st.sidebar.button("Login"):
+            hashed_pswd = make_hashes(password)
+            result = login_user(username,check_hashes(password, hashed_pswd), c)
+
+            if result:
+                #If login was successful 
+                st.success("Admin Logged In as {}".format(username))
+                task = st.selectbox("Task",["Deposit Cash"])
+            else:
+                st.error("[Error] Login Failed")   
 
     elif choice == "SignUp":
         st.subheader("Create New Account")
