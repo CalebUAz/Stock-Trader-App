@@ -40,8 +40,7 @@ def main():
             if st.button("Signup"):
                 #add entered details to the DB
                 add_admin(new_full_name, new_email, new_user, new_password, c, conn)
-                st.success("You have successfully created a valid Admin Account")
-                st.info("Go to Admin Login Menu to login")
+
 
 if __name__ == '__main__':
     main()
