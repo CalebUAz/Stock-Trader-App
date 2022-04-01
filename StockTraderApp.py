@@ -64,22 +64,32 @@ def main():
                         deposit_cash(username, new_cash, c, conn)
                         update_transcation_table(username, new_cash, task, c, conn)
                         
-                if task == "Portfolio":
-                    print("")
+                if task == "Cash Withdraw":
+                    st.subheader('Cash Withdraw')
+                    new_cash = st.number_input("")
+                    if st.checkbox('Withdraw'):
+                        update_transcation_table(username, new_cash, task, c, conn)
+                
+                if task == "Buy Stocks":
+                    st.subheader('Buy Stocks')
+                    ViewStk = st.selectbox("Select Stock",pd.DataFrame(fetch_stocks(c)))
+                    if st.checkbox('Buy'):
+                        new_cash = 0
+                        update_transcation_table(username, new_cash , task, c, conn, ticker = ViewStk)
+
 
             else:
                 st.error("[Error] Login Failed")   
 
     elif choice == "SignUp":
+        create_admin_table(c)
+        create_user_table(c)
+        create_transaction_table(c)        
         st.subheader("Create New Account")
         task = st.selectbox("Choose",["Create Admin Account","Create User Account"])
 
         if task == "Create Admin Account":
             #first create an admin and user table if not created already
-            create_admin_table(c)
-            create_user_table(c)
-            create_transaction_table(c)
-
             new_full_name = st.text_input("Full Name")
             new_email = st.text_input("Email")      
             new_user = st.text_input("Username")
