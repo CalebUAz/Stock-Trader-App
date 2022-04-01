@@ -2,7 +2,7 @@ from email.utils import parseaddr
 import streamlit as st
 
 def add_user(fullname, email, username, password, c, conn):
-
+    cash = 0
     #perform sanity check for entered username and emails
     if any(char.isnumeric() for char in username) or any(char.isnumeric() for char in fullname):
         st.error(f"The username {username} is unavailable, please don't use numbers.")
@@ -15,7 +15,7 @@ def add_user(fullname, email, username, password, c, conn):
         if len(c.execute('SELECT username FROM usertable WHERE username=?', (username, )).fetchall()) > 0:
             st.error("Username already exsists") 
         else:
-            c.execute('INSERT INTO usertable(fullname, email, username, password) VALUES (?,?, ?, ?)',(fullname, email, username, password))
+            c.execute('INSERT INTO usertable(fullname, email, username, password, cash) VALUES (?,?, ?, ?, ?)',(fullname, email, username, password, cash))
             conn.commit() 
             st.success("You have successfully created a valid User Account")
             st.info("Go to User Login Menu to login")        

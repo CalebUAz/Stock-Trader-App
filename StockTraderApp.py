@@ -2,16 +2,17 @@ import pandas as pd
 import streamlit as st
 import sqlite3 
 
+
 from Stocks import create_stocks
 from Admin import create_admin_table, add_admin, login_admin
-from User import create_user_table, add_user, login_user
+from User import create_user_table, add_user, login_user, user_functionality
 from Encryption import check_hashes, make_hashes
 
 conn = sqlite3.connect('data.db')
 c = conn.cursor()
 
 def main():
-
+    
     st.title("Stock trading application")
 
     menu = ["Home","User Login","SignUp", "Admin Login"]
@@ -39,14 +40,24 @@ def main():
         st.subheader("Login Section")           
         username = st.sidebar.text_input("User Name")
         password = st.sidebar.text_input("Password",type='password')
-        if st.sidebar.button("Login"):
+        if st.sidebar.checkbox("Login"):
             hashed_pswd = make_hashes(password)
             result = login_user(username,check_hashes(password, hashed_pswd), c)
 
             if result:
                 #If login was successful 
                 st.success("Admin Logged In as {}".format(username))
-                task = st.selectbox("Task",["Deposit Cash"])
+                task = st.selectbox("Task",["Deposit Cash","Portfolio"])
+
+                if task == "Deposit Cash":
+                    st.subheader('Deposit Cash')
+                    new_cash = st.number_input("") 
+                    if st.checkbox('Deposit'):
+                        st.success("Successfully deposited {}".format(new_cash))
+                        user_functionality(username, new_cash, c, conn)
+                if task == "Portfolio":
+                    print("Hello")
+                    
             else:
                 st.error("[Error] Login Failed")   
 
@@ -68,7 +79,7 @@ def main():
                 #add entered details to the DB
                 add_admin(new_full_name, new_email, new_user, make_hashes(new_password), c, conn)
                 #clear 
-                st.experimental_singleton.clear()
+                #st.experimental_singleton.clear()
 
         elif task == "Create User Account":
             new_full_name = st.text_input("Full Name")
