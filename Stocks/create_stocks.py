@@ -4,6 +4,7 @@ import pandas as pd
 import sqlite3
 
 def create_stocks(ticker, company_name, conn, c):
+    #we generate 5 stocks so that we can display these on the home page
     df = pd.DataFrame(columns=['Date','Open','Close','High','Low','AdjClose','Volume'])
     df.Date = pd.date_range(start='03-25-2022', end=datetime.now().strftime('%Y-%m-%d, %H:%M:%S'), freq="1min")
 

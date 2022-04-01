@@ -3,7 +3,7 @@ import streamlit as st
 import sqlite3 
 
 
-from Stocks import create_stocks
+from Stocks import create_stocks, fetch_stocks, display_stock
 from Admin import create_admin_table, add_admin, login_admin
 from User import create_user_table, add_user, login_user, deposit_cash
 from Encryption import check_hashes, make_hashes
@@ -20,6 +20,8 @@ def main():
 
     if choice == "Home":
          st.subheader("Home")
+         ViewStk = st.selectbox("Select Stock",pd.DataFrame(fetch_stocks(c)))
+         display_stock(ViewStk)
     
     elif choice == "Admin Login":
         st.subheader("Admin Login Section")
