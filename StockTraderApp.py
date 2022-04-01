@@ -5,7 +5,9 @@ import sqlite3
 
 from Stocks import create_stocks, fetch_stocks, display_stock
 from Admin import create_admin_table, add_admin, login_admin
-from User import create_user_table, add_user, login_user, deposit_cash
+from User import (create_user_table, add_user, login_user, 
+                    deposit_cash, create_transaction_table, 
+                    update_transcation_table)
 from Encryption import check_hashes, make_hashes
 
 conn = sqlite3.connect('data.db')
@@ -53,14 +55,15 @@ def main():
             if result:
                 #If login was successful 
                 st.success("Admin Logged In as {}".format(username))
-                task = st.selectbox("Task",["Deposit Cash","Portfolio"])
+                task = st.selectbox("Task",["Deposit Cash", "Buy Stocks", "Sell Stocks","Portfolio", "Cash Withdraw"])
 
                 if task == "Deposit Cash":
                     st.subheader('Deposit Cash')
                     new_cash = st.number_input("") 
                     if st.checkbox('Deposit'):
                         deposit_cash(username, new_cash, c, conn)
-
+                        update_transcation_table(username, new_cash, task, c, conn)
+                        
                 if task == "Portfolio":
                     print("")
 
@@ -75,6 +78,7 @@ def main():
             #first create an admin and user table if not created already
             create_admin_table(c)
             create_user_table(c)
+            create_transaction_table(c)
 
             new_full_name = st.text_input("Full Name")
             new_email = st.text_input("Email")      
