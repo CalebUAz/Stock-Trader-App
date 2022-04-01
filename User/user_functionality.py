@@ -27,6 +27,16 @@ def update_transcation_table(username, new_cash, operation, c, conn, ticker = ""
         else:
             st.warning("You don't have suffient cash to buy {}".format(ticker))
 
+    if operation == "Sell Stocks":
+        UserCash = c.execute('SELECT cash FROM usertable where username=?', (username,)) 
+        UserCash = UserCash.fetchone()[0]
+        StockCash = c.execute('SELECT Open FROM {} ORDER BY Date DESC LIMIT 1'.format(ticker))
+        StockCash = StockCash.fetchone()[0] 
+
+        c.execute('UPDATE usertable SET cash = (cash + ?) WHERE username=?', (StockCash,username,)) 
+        st.success("Successfully Sold {}".format(ticker))
+        new_cash = StockCash
+
         
     dateTim = datetime.now().strftime('%Y-%m-%d, %H:%M:%S')
     c.execute('INSERT INTO transactiontable(username, operation, amount, date, ticker) VALUES (?,?, ?, ?, ?)',(username, operation, new_cash, dateTim, ticker))

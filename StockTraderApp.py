@@ -7,7 +7,7 @@ from Stocks import create_stocks, fetch_stocks, display_stock
 from Admin import create_admin_table, add_admin, login_admin
 from User import (create_user_table, add_user, login_user, 
                     deposit_cash, create_transaction_table, 
-                    update_transcation_table)
+                    update_transcation_table, fetch_bought_stocks)
 from Encryption import check_hashes, make_hashes
 
 conn = sqlite3.connect('data.db')
@@ -77,6 +77,12 @@ def main():
                         new_cash = 0
                         update_transcation_table(username, new_cash , task, c, conn, ticker = ViewStk)
 
+                if task == "Sell Stocks":
+                    st.subheader('Sell Stocks')
+                    ViewStk = st.selectbox("Select Stock",pd.DataFrame(fetch_bought_stocks(username, c)))
+                    if st.checkbox('Sell'):
+                        new_cash = 0
+                        update_transcation_table(username, new_cash , task, c, conn, ticker = ViewStk)
 
             else:
                 st.error("[Error] Login Failed")   
