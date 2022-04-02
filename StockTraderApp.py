@@ -90,28 +90,31 @@ def main():
                 if task == "Buy Stocks":
                     st.subheader('Buy Stocks')
 
-                    market_hours_schedule(c)
+                    if market_hours_schedule(c) == True:
                     
-                    ViewStk = st.selectbox("Select Stock",pd.DataFrame(fetch_stocks(c)))
-                    display_stock(ViewStk)
-                    buy = st.radio('Choose type of operation:',('Buy', 'Limit order buy'))
-                    #if st.checkbox('Buy'):
-                    if buy == 'buy':
-                        new_cash = 0
-                        update_transcation_table(username, new_cash , task, c, conn, ticker = ViewStk)
-                    else:
-                        new_cash = 0
-                        limit_order = st.number_input("")
-                        update_transcation_table(username, new_cash , task, c, conn, limorder = limit_order, ticker = ViewStk)
+                        ViewStk = st.selectbox("Select Stock",pd.DataFrame(fetch_stocks(c)))
+                        display_stock(ViewStk)
+                        buy = st.radio('Choose type of operation:',('Buy', 'Limit order buy'))
+                        #if st.checkbox('Buy'):
+                        if buy == 'buy':
+                            new_cash = 0
+                            update_transcation_table(username, new_cash , task, c, conn, ticker = ViewStk)
+                        else:
+                            new_cash = 0
+                            limit_order = st.number_input("")
+                            update_transcation_table(username, new_cash , task, c, conn, limorder = limit_order, ticker = ViewStk)
 
                 if task == "Sell Stocks":
                     st.subheader('Sell Stocks')
-                    ViewStk = st.selectbox("Select Stock",pd.DataFrame(fetch_bought_stocks(username, c)))
-                    display_stock(ViewStk)
-                    if st.checkbox('Sell'):
-                        new_cash = 0
-                        limit_order = st.number_input("")
-                        update_transcation_table(username, new_cash , task, c, conn, ticker = ViewStk)
+
+                    if market_hours_schedule(c) == True:
+
+                        ViewStk = st.selectbox("Select Stock",pd.DataFrame(fetch_bought_stocks(username, c)))
+                        display_stock(ViewStk)
+                        if st.checkbox('Sell'):
+                            new_cash = 0
+                            limit_order = st.number_input("")
+                            update_transcation_table(username, new_cash , task, c, conn, ticker = ViewStk)
 
                 if task == "Transcation history":
                     st.subheader("Transcation history")

@@ -14,7 +14,7 @@ def market_hours_schedule(c):
   #end = '16:00:00'
   if (0 <= time.localtime().tm_wday <= 4) and current_time > start and current_time < end:
     st.subheader('Market is open')
-    #return True
+    return True
   else:
-    st.subheader('Market is closed')
-    #return False
+    st.subheader('Sorry, Market is closed')
+    return False
