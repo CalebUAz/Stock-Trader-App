@@ -8,7 +8,7 @@ from Admin import create_admin_table, add_admin, login_admin
 from User import (create_user_table, add_user, login_user, 
                     deposit_cash, create_transaction_table, 
                     update_transcation_table, fetch_bought_stocks, 
-                    display_transcation_table)
+                    display_transcation_table, stock_portfolio)
 from Encryption import check_hashes, make_hashes
 
 conn = sqlite3.connect('data.db')
@@ -98,7 +98,9 @@ def main():
                     st.subheader("Transcation history")
                     display_transcation_table(username, conn)
 
-
+                if task == "Portfolio":
+                    st.subheader("Portfolio")
+                    stock_portfolio(username, conn, c)
             else:
                 st.error("[Error] Login Failed")   
 

@@ -47,7 +47,27 @@ def update_transcation_table(username, new_cash, operation, c, conn, limorder = 
 def display_transcation_table(username, conn):
     df = pd.read_sql('SELECT * FROM transactiontable where username = "{}"'.format(username),  conn)
     df = df.set_index('date')
-    #df = df.drop('Date',axis=1)
-    #df = df.drop('index',axis=1)
-    #df = df.rename(columns={'Date':'index'}).set_index('index')
+    df = df.drop(columns = 'username')
     st.dataframe(df)
+
+def stock_portfolio(username, conn, c):
+    df = pd.read_sql('SELECT * FROM transactiontable where username = "{}"'.format(username),  conn)
+    df = df[df.operation == "Buy Stocks"]
+    df = df.drop(columns = ['username','date','operation'])
+    tick = df.ticker.unique()
+
+    df_new = pd.DataFrame(columns = ['Ticker', 'Company', 'Price','Shares'])
+
+    for t in tick:
+        company = c.execute('SELECT CompanyName FROM lookuptable where TickerName = ?',(t,))
+        cmpny = company.fetchone()
+        temp = pd.DataFrame(
+            {
+            'Ticker' : t, 
+            'Company' : cmpny,
+            'Price' : df.loc[df['ticker'] == t, 'amount'].sum(),
+            'Shares' : df.loc[df['ticker'] == t, 'amount'].count()
+            }
+        )
+        df_new = pd.concat([df_new, temp])
+    st.dataframe(df_new)
