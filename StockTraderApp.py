@@ -2,7 +2,6 @@ import pandas as pd
 import streamlit as st
 import sqlite3 
 
-
 from Stocks import (create_stocks, fetch_stocks, display_stock)
 from Admin import (create_admin_table, add_admin, login_admin,
                     create_market_schedule, insert_market_schedule,
@@ -57,7 +56,6 @@ def main():
                     if st.button('Add'):
                         insert_market_schedule(open_time, close_time, conn, c)
                         
-
             else:
                 st.error("[Error] Login Failed")    
 
@@ -91,7 +89,8 @@ def main():
                     st.subheader('Buy Stocks')
 
                     if market_hours_schedule(c) == True:
-                    
+                        #Enter only if its a working day and the within the range of time assigned by Admin
+                       
                         ViewStk = st.selectbox("Select Stock",pd.DataFrame(fetch_stocks(c)))
                         display_stock(ViewStk)
                         buy = st.radio('Choose type of operation:',('Buy', 'Limit order buy'))
@@ -108,6 +107,7 @@ def main():
                     st.subheader('Sell Stocks')
 
                     if market_hours_schedule(c) == True:
+                        #Enter only if its a working day and the within the range of time assigned by Admin
 
                         ViewStk = st.selectbox("Select Stock",pd.DataFrame(fetch_bought_stocks(username, c)))
                         display_stock(ViewStk)
