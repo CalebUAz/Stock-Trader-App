@@ -46,10 +46,14 @@ streamlit run StockTraderApp.py
 ## Key components of the system:
 ## 1. User:
 > A. The user can add create an account with their credentials, the system check if username exists or not, if it does it won't allow the same user to be used for registration. The system also checks if the email is entered correctly. 
+> 
 > B. The user can buy or sell stocks during the market time window and schedule. 
+> 
 > C. When it come to buying stocks, it check if the user has sufficient funds to purchase those stocks. When the user buys a stock it deducts amount from users cash account. 
+> 
 > D. When the user sells the stock, the cash goes back to the users cash account. 
 
 ## 2. Admin:
 > A. The Admin can Add stocks. 
+> 
 > B. The Admin assigns the market schedule and market time window. 
