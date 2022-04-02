@@ -51,8 +51,8 @@ def main():
                         st.info('Please wait while the stock is being generated')
                 
                 if task == "Market Hours":
-                    open_time = st.time_input('Set market open time')
-                    close_time = st.time_input('Set market close time')
+                    open_time = st.text_input('Set market open time')
+                    close_time = st.text_input('Set market close time')
                     if st.button('Add'):
                         insert_market_schedule(open_time, close_time, conn, c)
                         

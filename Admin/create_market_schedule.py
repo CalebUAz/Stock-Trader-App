@@ -1,10 +1,11 @@
+from datetime import datetime
 import streamlit as st 
-
+from datetime import datetime
 def create_market_schedule(c):
-    c.execute('CREATE TABLE IF NOT EXISTS marketschedule (OpenTime DATETIME, CloseTime DATETIME)')
+    c.execute('CREATE TABLE IF NOT EXISTS marketschedule (OpenTime timestamp, CloseTime timestamp)')
     
 def insert_market_schedule(otime, ctime, conn, c):
-     c.execute('INSERT INTO marketschedule (OpenTime, CloseTime) VALUES (?, ?)',(otime, ctime))
+     c.execute('INSERT INTO marketschedule VALUES (?, ?)',(otime, ctime, ))
      conn.commit()
      num_entries = c.execute('select max(RowId) from marketschedule').fetchone()[0]
 
