@@ -7,7 +7,8 @@ from Stocks import create_stocks, fetch_stocks, display_stock
 from Admin import create_admin_table, add_admin, login_admin
 from User import (create_user_table, add_user, login_user, 
                     deposit_cash, create_transaction_table, 
-                    update_transcation_table, fetch_bought_stocks)
+                    update_transcation_table, fetch_bought_stocks, 
+                    display_transcation_table)
 from Encryption import check_hashes, make_hashes
 
 conn = sqlite3.connect('data.db')
@@ -55,7 +56,7 @@ def main():
             if result:
                 #If login was successful 
                 st.success("Admin Logged In as {}".format(username))
-                task = st.selectbox("Task",["Deposit Cash", "Buy Stocks", "Sell Stocks","Portfolio", "Cash Withdraw"])
+                task = st.selectbox("Task",["Deposit Cash", "Buy Stocks", "Sell Stocks","Portfolio", "Cash Withdraw" ,"Transcation history"])
 
                 if task == "Deposit Cash":
                     st.subheader('Deposit Cash')
@@ -73,16 +74,30 @@ def main():
                 if task == "Buy Stocks":
                     st.subheader('Buy Stocks')
                     ViewStk = st.selectbox("Select Stock",pd.DataFrame(fetch_stocks(c)))
-                    if st.checkbox('Buy'):
+                    display_stock(ViewStk)
+                    buy = st.radio('Choose type of operation:',('Buy', 'Limit order buy'))
+                    #if st.checkbox('Buy'):
+                    if buy == 'buy':
                         new_cash = 0
                         update_transcation_table(username, new_cash , task, c, conn, ticker = ViewStk)
+                    else:
+                        new_cash = 0
+                        limit_order = st.number_input("")
+                        update_transcation_table(username, new_cash , task, c, conn, limorder = limit_order, ticker = ViewStk)
 
                 if task == "Sell Stocks":
                     st.subheader('Sell Stocks')
                     ViewStk = st.selectbox("Select Stock",pd.DataFrame(fetch_bought_stocks(username, c)))
+                    display_stock(ViewStk)
                     if st.checkbox('Sell'):
                         new_cash = 0
+                        limit_order = st.number_input("")
                         update_transcation_table(username, new_cash , task, c, conn, ticker = ViewStk)
+
+                if task == "Transcation history":
+                    st.subheader("Transcation history")
+                    display_transcation_table(username, conn)
+
 
             else:
                 st.error("[Error] Login Failed")   
