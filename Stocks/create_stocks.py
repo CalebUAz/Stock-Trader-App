@@ -1,6 +1,7 @@
 from datetime import date, datetime
 from random import gauss
 import pandas as pd
+import streamlit as st
 import sqlite3
 
 def create_stocks(ticker, company_name, conn, c):
@@ -26,6 +27,8 @@ def create_stocks(ticker, company_name, conn, c):
     c.execute('CREATE TABLE IF NOT EXISTS lookuptable(TickerName TEXT, CompanyName TEXT)')
     c.execute('INSERT INTO lookuptable (TickerName, CompanyName) VALUES (?,?)',(ticker, company_name))
     conn.commit()
+
+    st.success("Successfully created stock {}".format(ticker))
         #df.Volume[i]  = value + gauss(5, 10)
     #st.dataframe(df)
     return df   

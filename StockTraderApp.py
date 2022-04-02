@@ -3,8 +3,10 @@ import streamlit as st
 import sqlite3 
 
 
-from Stocks import create_stocks, fetch_stocks, display_stock
-from Admin import create_admin_table, add_admin, login_admin
+from Stocks import (create_stocks, fetch_stocks, display_stock)
+from Admin import (create_admin_table, add_admin, login_admin,
+                    create_market_schedule, insert_market_schedule,
+                    market_hours_schedule)
 from User import (create_user_table, add_user, login_user, 
                     deposit_cash, create_transaction_table, 
                     update_transcation_table, fetch_bought_stocks, 
@@ -27,6 +29,8 @@ def main():
          display_stock(ViewStk)
     
     elif choice == "Admin Login":
+        create_market_schedule(c)
+
         st.subheader("Admin Login Section")
         username = st.sidebar.text_input("User Name")
         password = st.sidebar.text_input("Password",type='password')
@@ -37,10 +41,22 @@ def main():
             if result:
                 #If login was successful 
                 st.success("Admin Logged In as {}".format(username))
-                task = st.selectbox("Task",["AddStocks","ViewStocks","DeleteStocks","Profiles"])
+                task = st.selectbox("Task",["AddStocks","Market Hours"])
 
                 if task == "AddStocks":
-                    print("")
+                    new_ticker_name = st.text_input("Enter Ticker name")
+                    new_company_name = st.text_input("Enter Company name")
+
+                    if st.button('Add'):
+                        create_stocks(new_ticker_name, new_company_name, conn, c)
+                        st.info('Please wait while the stock is being generated')
+                
+                if task == "Market Hours":
+                    open_time = st.time_input('Set market open time')
+                    close_time = st.time_input('Set market close time')
+                    if st.button('Add'):
+                        insert_market_schedule(open_time, close_time, conn, c)
+                        
 
             else:
                 st.error("[Error] Login Failed")    
@@ -73,6 +89,9 @@ def main():
                 
                 if task == "Buy Stocks":
                     st.subheader('Buy Stocks')
+
+                    market_hours_schedule(c)
+                    
                     ViewStk = st.selectbox("Select Stock",pd.DataFrame(fetch_stocks(c)))
                     display_stock(ViewStk)
                     buy = st.radio('Choose type of operation:',('Buy', 'Limit order buy'))
